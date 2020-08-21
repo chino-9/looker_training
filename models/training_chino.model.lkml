@@ -5,8 +5,7 @@ include: "/views/**/*.view"
 
 # キャッシュ設定
 datagroup: default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
+  max_cache_age: "24 hour"
 }
 
 datagroup: order_items {
@@ -43,13 +42,12 @@ explore: inventory_items {
 }
 
 explore: order_items {
-  # datagroup設定
   persist_with: order_items
-  # Exploreフィルタ追加
-#   sql_always_where: ${returned_date} IS NULL and ${status} = 'complete';;
   sql_always_where: ${status} = 'Complete';;
-#   sql_always_having: ${total_sales} > 200 and ${count} > 5000;;
-#   sql_always_having: ${count} > 5000;;
+  access_filter: {
+    field: products.category
+    user_attribute: category_test
+  }
 
   join: users {
     type: left_outer
